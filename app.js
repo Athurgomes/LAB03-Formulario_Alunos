@@ -1,26 +1,36 @@
-let alunos = [];
-let idEdicao = null;
+class Aluno {
+    constructor(nome, idade, curso, notaFinal) {
+        this.nome = nome;
+        this.idade = parseInt(idade);
+        this.curso = curso;
+        this.notaFinal = parseFloat(notaFinal);
+    }
+
+    isAprovado() {
+        return this.notaFinal >= 7;
+    }
+
+    toString() {
+        const status = this.isAprovado() ? 'Aprovado' : 'Reprovado';
+        return `Nome: ${this.nome}, Curso: ${this.curso}, Nota: ${this.notaFinal} (${status})`;
+    }
+}
 
 function salvarAluno() {
     const nome = document.getElementById('nome').value;
-    const idade = parseInt(document.getElementById('idade').value);
+    const idade = document.getElementById('idade').value;
     const curso = document.getElementById('curso').value;
-    const notaFinal = parseFloat(document.getElementById('notaFinal').value);
+    const notaFinal = document.getElementById('notaFinal').value;
 
     if (idEdicao !== null) {
         const aluno = alunos[idEdicao];
         aluno.nome = nome;
-        aluno.idade = idade;
+        aluno.idade = parseInt(idade);
         aluno.curso = curso;
-        aluno.notaFinal = notaFinal;
+        aluno.notaFinal = parseFloat(notaFinal);
         idEdicao = null;
     } else {
-        const novoAluno = {
-            nome: nome,
-            idade: idade,
-            curso: curso,
-            notaFinal: notaFinal
-        };
+        const novoAluno = new Aluno(nome, idade, curso, notaFinal);
         alunos.push(novoAluno);
     }
 
@@ -34,11 +44,14 @@ function renderizarTabela() {
 
     alunos.forEach((aluno, index) => {
         const tr = document.createElement('tr');
+        const status = aluno.isAprovado() ? 'Aprovado' : 'Reprovado';
+
         tr.innerHTML = `
             <td>${aluno.nome}</td>
             <td>${aluno.idade}</td>
             <td>${aluno.curso}</td>
-            <td>${aluno.notaFinal}</td>
+            <td>${aluno.notaFinal.toFixed(1)}</td>
+            <td>${status}</td>
             <td>
                 <button onclick="prepararEdicao(${index})">Editar</button>
                 <button onclick="excluirAluno(${index})">Excluir</button>
