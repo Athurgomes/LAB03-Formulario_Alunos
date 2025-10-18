@@ -16,6 +16,17 @@ class Aluno {
     }
 }
 
+let alunos = [];
+let idEdicao = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('alunoForm').addEventListener('submit', (event) => {
+        event.preventDefault();
+        salvarAluno();
+    });
+    renderizarTabela();
+});
+
 function salvarAluno() {
     const nome = document.getElementById('nome').value;
     const idade = document.getElementById('idade').value;
@@ -28,10 +39,13 @@ function salvarAluno() {
         aluno.idade = parseInt(idade);
         aluno.curso = curso;
         aluno.notaFinal = parseFloat(notaFinal);
+        
+        alert(`Aluno ${aluno.nome} editado com sucesso!`);
         idEdicao = null;
     } else {
         const novoAluno = new Aluno(nome, idade, curso, notaFinal);
         alunos.push(novoAluno);
+        alert(`Aluno ${novoAluno.nome} cadastrado com sucesso!`);
     }
 
     renderizarTabela();
@@ -52,11 +66,25 @@ function renderizarTabela() {
             <td>${aluno.curso}</td>
             <td>${aluno.notaFinal.toFixed(1)}</td>
             <td>${status}</td>
-            <td>
-                <button onclick="prepararEdicao(${index})">Editar</button>
-                <button onclick="excluirAluno(${index})">Excluir</button>
-            </td>
         `;
+        
+        const tdAcoes = document.createElement('td');
+        
+        const btnEditar = document.createElement('button');
+        btnEditar.textContent = 'Editar';
+        btnEditar.addEventListener('click', () => {
+            prepararEdicao(index);
+        });
+        
+        const btnExcluir = document.createElement('button');
+        btnExcluir.textContent = 'Excluir';
+        btnExcluir.addEventListener('click', () => {
+            excluirAluno(index);
+        });
+
+        tdAcoes.appendChild(btnEditar);
+        tdAcoes.appendChild(btnExcluir);
+        tr.appendChild(tdAcoes);
         tbody.appendChild(tr);
     });
 }
@@ -71,10 +99,10 @@ function prepararEdicao(index) {
 }
 
 function excluirAluno(index) {
-    if (confirm(`Tem certeza que deseja excluir ${alunos[index].nome}?`)) {
+    const aluno = alunos[index];
+    if (confirm(`Tem certeza que deseja excluir ${aluno.nome}?`)) {
         alunos.splice(index, 1);
         renderizarTabela();
+        alert(`Aluno ${aluno.nome} excluído.`);
     }
 }
-
-renderizarTabela();
