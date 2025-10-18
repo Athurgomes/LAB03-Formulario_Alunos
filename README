@@ -1,4 +1,4 @@
-# Sistema de Gerenciamento de Alunos 
+# Sistema de Gerenciamento de Alunos
 
 Este é um projeto de estudo de caso simples para um sistema de gerenciamento de alunos, implementado inteiramente com HTML e JavaScript (front-end).
 
@@ -6,16 +6,16 @@ Este é um projeto de estudo de caso simples para um sistema de gerenciamento de
 
 O sistema permite:
 
-  * **Cadastrar** alunos com Nome, Idade, Curso e Nota Final.
-  * **Listar** os alunos cadastrados em uma tabela.
-  * **Editar** os dados de um aluno existente.
-  * **Excluir** um aluno da lista.
-  * **Gerar Relatórios** (via console do navegador) sobre:
-      * Alunos aprovados (Nota \>= 7).
-      * Média de notas da turma.
-      * Média de idade da turma.
-      * Nomes dos alunos em ordem alfabética.
-      * Quantidade de alunos por curso.
+* **Cadastrar** alunos com Nome, Idade, Curso e Nota Final.
+* **Listar** os alunos cadastrados em uma tabela.
+* **Editar** os dados de um aluno existente.
+* **Excluir** um aluno da lista.
+* **Gerar Relatórios** (via console do navegador) sobre:
+    * Alunos aprovados (Nota >= 7).
+    * Média de notas da turma.
+    * Média de idade da turma.
+    * Nomes dos alunos em ordem alfabética.
+    * Quantidade de alunos por curso.
 
 ## Como Rodar o Projeto com Docker
 
@@ -23,7 +23,7 @@ Este projeto é servido como um site estático usando Nginx dentro de um contain
 
 ### Pré-requisitos
 
-  * Docker deve estar instalado e em execução na sua máquina.
+* Docker deve estar instalado e em execução na sua máquina.
 
 ### Passos
 
@@ -43,13 +43,13 @@ Este projeto é servido como um site estático usando Nginx dentro de um contain
     docker run -d -p 8080:80 gestao-alunos
     ```
 
-      * `-d` roda o container em segundo plano.
-      * `-p 8080:80` mapeia a porta 8080 do seu computador para a porta 80 do container (onde o Nginx está).
+    * `-d` roda o container em segundo plano.
+    * `-p 8080:80` mapeia a porta 8080 do seu computador para a porta 80 do container (onde o Nginx está).
 
 3.  **Acesse o Sistema**
     Abra seu navegador e acesse:
 
     `http://localhost:8080`
 
-5.  **Ver os Relatórios**
-    Para ver os relatórios, abra as "Ferramentas de Desenvolvedor" do seu navegador (clique direito \> Inspecionar) e vá para a aba **"Console"**. Os resultados aparecerão lá quando você clicar nos botões de relatório.
+4.  **Ver os Relatórios**
+    Para ver os relatórios, abra as "Ferramentas de Desenvolvedor" do seu navegador (clique direito > Inspecionar) e vá para a aba **"Console"**. Os resultados aparecerão lá quando você clicar nos botões de relatório.
