@@ -24,6 +24,13 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         salvarAluno();
     });
+
+    document.getElementById('btnAprovados').addEventListener('click', gerarRelatorioAprovados);
+    document.getElementById('btnMediaNotas').addEventListener('click', gerarRelatorioMediaNotas);
+    document.getElementById('btnMediaIdades').addEventListener('click', gerarRelatorioMediaIdades);
+    document.getElementById('btnNomesAlfabeticos').addEventListener('click', gerarRelatorioNomesAlfabeticos);
+    document.getElementById('btnQtdPorCurso').addEventListener('click', gerarRelatorioAlunosPorCurso);
+
     renderizarTabela();
 });
 
@@ -40,12 +47,12 @@ function salvarAluno() {
         aluno.curso = curso;
         aluno.notaFinal = parseFloat(notaFinal);
         
-        alert(`Aluno ${aluno.nome} editado com sucesso!`);
+        console.log(`Aluno ${aluno.nome} editado com sucesso!`);
         idEdicao = null;
     } else {
         const novoAluno = new Aluno(nome, idade, curso, notaFinal);
         alunos.push(novoAluno);
-        alert(`Aluno ${novoAluno.nome} cadastrado com sucesso!`);
+        console.log(`Aluno ${novoAluno.nome} cadastrado com sucesso!`);
     }
 
     renderizarTabela();
@@ -103,6 +110,71 @@ function excluirAluno(index) {
     if (confirm(`Tem certeza que deseja excluir ${aluno.nome}?`)) {
         alunos.splice(index, 1);
         renderizarTabela();
-        alert(`Aluno ${aluno.nome} excluído.`);
+        console.log(`Aluno ${aluno.nome} excluído.`);
     }
+}
+
+function gerarRelatorioAprovados() {
+    console.clear();
+    console.log("--- Relatório: Alunos Aprovados ---");
+    const aprovados = alunos.filter(aluno => aluno.isAprovado());
+    if (aprovados.length === 0) {
+        console.log("Nenhum aluno aprovado.");
+        return;
+    }
+    aprovados.forEach(aluno => console.log(aluno.toString()));
+}
+
+function gerarRelatorioMediaNotas() {
+    console.clear();
+    console.log("--- Relatório: Média das Notas Finais ---");
+    if (alunos.length === 0) {
+        console.log("Nenhum aluno cadastrado.");
+        return;
+    }
+    const totalNotas = alunos.reduce((soma, aluno) => soma + aluno.notaFinal, 0);
+    const media = totalNotas / alunos.length;
+    console.log(`A média das notas finais é: ${media.toFixed(2)}`);
+}
+
+function gerarRelatorioMediaIdades() {
+    console.clear();
+    console.log("--- Relatório: Média das Idades ---");
+    if (alunos.length === 0) {
+        console.log("Nenhum aluno cadastrado.");
+        return;
+    }
+    const totalIdades = alunos.reduce((soma, aluno) => soma + aluno.idade, 0);
+    const media = totalIdades / alunos.length;
+    console.log(`A média de idade dos alunos é: ${media.toFixed(1)} anos`);
+}
+
+function gerarRelatorioNomesAlfabeticos() {
+    console.clear();
+    console.log("--- Relatório: Nomes em Ordem Alfabética ---");
+    if (alunos.length === 0) {
+        console.log("Nenhum aluno cadastrado.");
+        return;
+    }
+    const nomes = alunos
+        .map(aluno => aluno.nome)
+        .sort((a, b) => a.localeCompare(b));
+    
+    nomes.forEach(nome => console.log(nome));
+}
+
+function gerarRelatorioAlunosPorCurso() {
+    console.clear();
+    console.log("--- Relatório: Quantidade de Alunos por Curso ---");
+    if (alunos.length === 0) {
+        console.log("Nenhum aluno cadastrado.");
+        return;
+    }
+    const contagemPorCurso = alunos.reduce((contagem, aluno) => {
+        const curso = aluno.curso;
+        contagem[curso] = (contagem[curso] || 0) + 1;
+        return contagem;
+    }, {});
+
+    console.log(contagemPorCurso);
 }
