@@ -47,12 +47,12 @@ function salvarAluno() {
         aluno.curso = curso;
         aluno.notaFinal = parseFloat(notaFinal);
         
-        console.log(`Aluno ${aluno.nome} editado com sucesso!`);
+        console.log(`Aluno ${aluno.nome} editado com sucesso!`); // Log de console mantido
         idEdicao = null;
     } else {
         const novoAluno = new Aluno(nome, idade, curso, notaFinal);
         alunos.push(novoAluno);
-        console.log(`Aluno ${novoAluno.nome} cadastrado com sucesso!`);
+        console.log(`Aluno ${novoAluno.nome} cadastrado com sucesso!`); // Log de console mantido
     }
 
     renderizarTabela();
@@ -110,64 +110,81 @@ function excluirAluno(index) {
     if (confirm(`Tem certeza que deseja excluir ${aluno.nome}?`)) {
         alunos.splice(index, 1);
         renderizarTabela();
-        console.log(`Aluno ${aluno.nome} excluído.`);
+        console.log(`Aluno ${aluno.nome} excluído.`); // Log de console mantido
     }
+}
+
+// --- FUNÇÕES DE RELATÓRIO MODIFICADAS ---
+
+// Função auxiliar para exibir o relatório na tela
+function exibirRelatorio(titulo, conteudo) {
+    const outputEl = document.getElementById('resultadosRelatorios');
+    if (!conteudo) {
+        conteudo = "Nenhum aluno cadastrado.";
+    }
+    outputEl.innerText = `${titulo}\n\n${conteudo}`;
 }
 
 function gerarRelatorioAprovados() {
-    console.clear();
-    console.log("--- Relatório: Alunos Aprovados ---");
+    const titulo = "--- Relatório: Alunos Aprovados ---";
     const aprovados = alunos.filter(aluno => aluno.isAprovado());
+    
     if (aprovados.length === 0) {
-        console.log("Nenhum aluno aprovado.");
+        exibirRelatorio(titulo, "Nenhum aluno aprovado.");
         return;
     }
-    aprovados.forEach(aluno => console.log(aluno.toString()));
+    
+    const conteudo = aprovados
+        .map(aluno => aluno.toString())
+        .join("\n"); // Junta todos os alunos com quebra de linha
+    
+    exibirRelatorio(titulo, conteudo);
 }
 
 function gerarRelatorioMediaNotas() {
-    console.clear();
-    console.log("--- Relatório: Média das Notas Finais ---");
+    const titulo = "--- Relatório: Média das Notas Finais ---";
     if (alunos.length === 0) {
-        console.log("Nenhum aluno cadastrado.");
+        exibirRelatorio(titulo, "Nenhum aluno cadastrado.");
         return;
     }
     const totalNotas = alunos.reduce((soma, aluno) => soma + aluno.notaFinal, 0);
     const media = totalNotas / alunos.length;
-    console.log(`A média das notas finais é: ${media.toFixed(2)}`);
+    const conteudo = `A média das notas finais é: ${media.toFixed(2)}`;
+    
+    exibirRelatorio(titulo, conteudo);
 }
 
 function gerarRelatorioMediaIdades() {
-    console.clear();
-    console.log("--- Relatório: Média das Idades ---");
+    const titulo = "--- Relatório: Média das Idades ---";
     if (alunos.length === 0) {
-        console.log("Nenhum aluno cadastrado.");
+        exibirRelatorio(titulo, "Nenhum aluno cadastrado.");
         return;
     }
     const totalIdades = alunos.reduce((soma, aluno) => soma + aluno.idade, 0);
     const media = totalIdades / alunos.length;
-    console.log(`A média de idade dos alunos é: ${media.toFixed(1)} anos`);
+    const conteudo = `A média de idade dos alunos é: ${media.toFixed(1)} anos`;
+
+    exibirRelatorio(titulo, conteudo);
 }
 
 function gerarRelatorioNomesAlfabeticos() {
-    console.clear();
-    console.log("--- Relatório: Nomes em Ordem Alfabética ---");
+    const titulo = "--- Relatório: Nomes em Ordem Alfabética ---";
     if (alunos.length === 0) {
-        console.log("Nenhum aluno cadastrado.");
+        exibirRelatorio(titulo, "Nenhum aluno cadastrado.");
         return;
     }
     const nomes = alunos
         .map(aluno => aluno.nome)
         .sort((a, b) => a.localeCompare(b));
     
-    nomes.forEach(nome => console.log(nome));
+    const conteudo = nomes.join("\n");
+    exibirRelatorio(titulo, conteudo);
 }
 
 function gerarRelatorioAlunosPorCurso() {
-    console.clear();
-    console.log("--- Relatório: Quantidade de Alunos por Curso ---");
+    const titulo = "--- Relatório: Quantidade de Alunos por Curso ---";
     if (alunos.length === 0) {
-        console.log("Nenhum aluno cadastrado.");
+        exibirRelatorio(titulo, "Nenhum aluno cadastrado.");
         return;
     }
     const contagemPorCurso = alunos.reduce((contagem, aluno) => {
@@ -176,5 +193,11 @@ function gerarRelatorioAlunosPorCurso() {
         return contagem;
     }, {});
 
-    console.log(contagemPorCurso);
+    // Formata o objeto para uma string legível
+    let conteudo = "";
+    for (const curso in contagemPorCurso) {
+        conteudo += `${curso}: ${contagemPorCurso[curso]} aluno(s)\n`;
+    }
+
+    exibirRelatorio(titulo, conteudo.trim());
 }
